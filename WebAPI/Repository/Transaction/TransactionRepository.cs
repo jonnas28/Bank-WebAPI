@@ -1,4 +1,5 @@
-﻿using WebAPI.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPI.Context;
 
 namespace WebAPI.Repository.Transaction
 {

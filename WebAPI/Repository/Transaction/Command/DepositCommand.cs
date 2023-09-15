@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Repository.Account.Command
+﻿namespace WebAPI.Repository.Transaction.Command
 {
     public class DepositCommand
     {

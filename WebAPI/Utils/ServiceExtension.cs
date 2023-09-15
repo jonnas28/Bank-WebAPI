@@ -3,7 +3,6 @@ using WebAPI.Context;
 using WebAPI.Models;
 using WebAPI.Repository.Identity;
 using WebAPI.Repository;
-using WebAPI.Repository.Account.Command;
 using WebAPI.Repository.Transaction.Command;
 
 namespace WebAPI.Utils
@@ -20,6 +19,7 @@ namespace WebAPI.Utils
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
             //Resolve CommandHandler
+            //Wrap this code
             services.AddScoped<DepositCommandHandler>();
             services.AddScoped<WithdrawCommandHandler>();
 

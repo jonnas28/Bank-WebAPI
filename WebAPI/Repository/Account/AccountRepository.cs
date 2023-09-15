@@ -29,5 +29,12 @@ namespace WebAPI.Repository.Account
             return await FindByCondition(x => x.AccountNumber.Equals(AccountNumber))
             .FirstOrDefaultAsync();
         }
+
+        public async Task<decimal> GetAccountBalance(string accountNumber)
+        {
+            return await FindByCondition(x => x.AccountNumber.Equals(accountNumber))
+                .Select(x=>x.Balance)
+            .FirstOrDefaultAsync();
+        }
     }
 }

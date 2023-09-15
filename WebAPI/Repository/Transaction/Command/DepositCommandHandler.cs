@@ -1,7 +1,4 @@
-﻿using Bank.Common;
-using WebAPI.Repository.Transaction;
-
-namespace WebAPI.Repository.Account.Command
+﻿namespace WebAPI.Repository.Transaction.Command
 {
     public class DepositCommandHandler
     {

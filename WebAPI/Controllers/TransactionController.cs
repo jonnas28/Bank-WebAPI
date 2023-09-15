@@ -1,17 +1,11 @@
 ﻿using AutoMapper;
 using Bank.Common;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
-using WebAPI.Repository;
 using WebAPI.Response;
-using WebAPI.Validators;
-using Helper.Common;
-using WebAPI.Models;
-using WebAPI.Repository.Account.Command;
 using WebAPI.Repository.Transaction.Command;
+using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
@@ -31,9 +25,9 @@ namespace WebAPI.Controllers
             WithdrawCommandHandler withdrawCommandHandler)
         {
             _mapper = mapper;
-            _repository = repository;
             _depositCommandHandler = depositCommandHandler;
             _withdrawCommandHandler = withdrawCommandHandler;
+            _repository = repository;
         }
 
         [HttpPost("deposit")]
@@ -99,6 +93,29 @@ namespace WebAPI.Controllers
             catch (Exception e)
             {
                 return BadRequest(new ApiResponse(500, "An error occurred while processing the withdraw."));
+            }
+        }
+
+        [HttpPost("balance")]
+        [SwaggerOperation(
+            Summary = "Balance Inquiry into an account",
+            Description = "Withdraw funds into the specified account."
+        )]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(ApiOkResponse<decimal>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Balance(string accountNumber)
+        {
+            try
+            {
+                var result = await _repository.Account.GetAccountBalance(accountNumber);
+
+                return Ok(new ApiOkResponse<decimal>(result));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ApiResponse(500, "An error occurred while processing the balance inquiry."));
             }
         }
     }
