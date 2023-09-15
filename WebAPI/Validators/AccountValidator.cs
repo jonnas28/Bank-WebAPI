@@ -13,7 +13,7 @@ namespace WebAPI.Validators
 
             RuleFor(x => x.AccountNumber)
                 .NotNull()
-                .Length(18);
+                .Length(16);
 
             RuleFor(x => x)
             .Must((account, x) =>

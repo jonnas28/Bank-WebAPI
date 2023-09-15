@@ -18,15 +18,18 @@ namespace WebAPI.Controllers
         IRepositoryWrapper _repository;
         DepositCommandHandler _depositCommandHandler;
         WithdrawCommandHandler _withdrawCommandHandler;
+        TransferCommandHandler _transferCommandHandler;
         public TransactionController(
             IMapper mapper,
             IRepositoryWrapper repository,
             DepositCommandHandler depositCommandHandler,
-            WithdrawCommandHandler withdrawCommandHandler)
+            WithdrawCommandHandler withdrawCommandHandler,
+            TransferCommandHandler transferCommandHandler)
         {
             _mapper = mapper;
             _depositCommandHandler = depositCommandHandler;
             _withdrawCommandHandler = withdrawCommandHandler;
+            _transferCommandHandler = transferCommandHandler;
             _repository = repository;
         }
 
@@ -116,6 +119,40 @@ namespace WebAPI.Controllers
             catch (Exception e)
             {
                 return BadRequest(new ApiResponse(500, "An error occurred while processing the balance inquiry."));
+            }
+        }
+
+        [HttpPost("transfer")]
+        [SwaggerOperation(
+            Summary = "Balance Inquiry into an account",
+            Description = "Withdraw funds into the specified account."
+        )]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(ApiOkResponse<decimal>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Transfer(string sourceAccountNumber,string destinationAccountNumber, decimal amount)
+        {
+            try
+            {
+                var command = new TransferCommand
+                {
+                    SourceAccountNumber = sourceAccountNumber,
+                    DestinationAccountNumber = destinationAccountNumber,
+                    Amount = amount
+                };
+
+                var result = await _transferCommandHandler.HandleAsync(command);
+
+                return Ok(new ApiOkResponse<TransactionDTO>(_mapper.Map<TransactionDTO>(result)));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ApiResponse(500, "An error occurred while processing the transfer."));
             }
         }
     }

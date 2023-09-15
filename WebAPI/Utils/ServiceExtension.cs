@@ -22,6 +22,7 @@ namespace WebAPI.Utils
             //Wrap this code
             services.AddScoped<DepositCommandHandler>();
             services.AddScoped<WithdrawCommandHandler>();
+            services.AddScoped<TransferCommandHandler>();
 
             // Resolve AutoMapper
             services.AddAutoMapper(typeof(Program));
