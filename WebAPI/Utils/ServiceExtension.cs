@@ -3,6 +3,8 @@ using WebAPI.Context;
 using WebAPI.Models;
 using WebAPI.Repository.Identity;
 using WebAPI.Repository;
+using WebAPI.Repository.Account.Command;
+using WebAPI.Repository.Transaction.Command;
 
 namespace WebAPI.Utils
 {
@@ -16,6 +18,13 @@ namespace WebAPI.Utils
                 .AddDefaultTokenProviders();
             services.AddScoped<IAuthenticateRepository, AuthenticateRepository>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
+            //Resolve CommandHandler
+            services.AddScoped<DepositCommandHandler>();
+            services.AddScoped<WithdrawCommandHandler>();
+
+            // Resolve AutoMapper
+            services.AddAutoMapper(typeof(Program));
 
             //CONFIGURE CORS
             services.AddCors(options =>

@@ -10,19 +10,29 @@ namespace WebAPI.Context
         {
             
         }
-
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            builder.Entity<User>(entity =>
-            {
-                entity.HasKey(e => e.Id)
-                    .HasName("PRIMARY");
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.SourceAccount)
+                .WithMany(a => a.SourceTransactions)
+                .HasForeignKey(t => t.SourceAccountId)
+                .IsRequired(false);
 
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-            });
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.DestinationAccount)
+                .WithMany(a => a.DestinationTransactions)
+                .HasForeignKey(t => t.DestinationAccountId)
+                .IsRequired(false);
 
-            base.OnModelCreating(builder);
+            modelBuilder.Entity<Account>()
+                .Property(a => a.Balance)
+                .HasColumnType("decimal(18, 2)"); // Adjust precision and scale as needed
+
+            base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<User>? Users { get; set; }
+        public DbSet<Account>? Accounts { get; set; }
+        public DbSet<Transaction>? Transactions{ get; set; }
     }
 }
