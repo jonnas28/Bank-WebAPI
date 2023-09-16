@@ -23,6 +23,10 @@ namespace WebAPI.Repository.Transaction.Command
             {
                 throw new ArgumentException("Destination Account Number doesn't exist");
             }
+            if (sourceAccount.Balance < command.Amount)
+            {
+                throw new ArgumentException("Insufficient balance.");
+            }
 
             // Create a transaction DTO for the transfer
             var depositTransaction = new Models.Transaction

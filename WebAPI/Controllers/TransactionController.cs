@@ -124,8 +124,8 @@ namespace WebAPI.Controllers
 
         [HttpPost("transfer")]
         [SwaggerOperation(
-            Summary = "Balance Inquiry into an account",
-            Description = "Withdraw funds into the specified account."
+            Summary = "Transfer into another account",
+            Description = "Transfer funds from another account."
         )]
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(ApiOkResponse<decimal>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse))]
